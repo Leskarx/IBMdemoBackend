@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import com.example.IbmDemoBackend.entity.UserEntity;
 
 public interface UserRepo extends MongoRepository<UserEntity,String> {
-    Optional<UserEntity> findbyemail(String email);
+    Optional<UserEntity> findByEmail(String email);
+    boolean existsByEmail(String email);
+
     
 }

@@ -2,12 +2,15 @@ package com.example.IbmDemoBackend.services.impl;
 
 import java.util.List;
 
-
+import org.springframework.stereotype.Service;
 
 import com.example.IbmDemoBackend.dto.UserDto;
+import com.example.IbmDemoBackend.entity.UserEntity;
+import com.example.IbmDemoBackend.mapper.UserMaper;
 import com.example.IbmDemoBackend.repository.UserRepo;
 import com.example.IbmDemoBackend.services.UserServices;
 
+@Service
 public class UserServiceImp implements UserServices {
 
   
@@ -17,11 +20,25 @@ public class UserServiceImp implements UserServices {
         this.userRepo = userRepo;
     }
 
-    @Override
-    public UserDto createUser(UserDto user) {
+    // @Override
+    // public UserDto createUser(UserDto user) {
+    //    UserEntity userEntity= UserMaper.toUserEntity(user);
+    //    UserEntity savedUserEntity=userRepo.save(userEntity);
+      
      
-        return null;
+    //     return UserMaper.toUserDto(savedUserEntity);
+    // }
+    
+    @Override
+public UserDto createUser(UserDto user) {
+    if (userRepo.existsByEmail(user.getEmail())) {
+        throw new RuntimeException("Email already exists.");
     }
+
+    UserEntity userEntity = UserMaper.toUserEntity(user);
+    UserEntity savedUserEntity = userRepo.save(userEntity);
+    return UserMaper.toUserDto(savedUserEntity);
+}
 
     @Override
     public List<UserDto> getAllUser() {
