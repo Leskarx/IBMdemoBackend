@@ -17,12 +17,13 @@ import lombok.NoArgsConstructor;
 public class PostEntity {
   @Id
     private String id;
+    @Indexed    
+    private String userId; 
     
     private String title;
     private String content;
 
-    @Indexed    
-    private String userId;       // ID of the user who created this post
+       // ID of the user who created this post
     private Instant createdAt;
 
 

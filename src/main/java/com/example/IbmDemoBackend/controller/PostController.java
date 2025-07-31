@@ -12,7 +12,7 @@ import com.example.IbmDemoBackend.dto.UserDto;
 import com.example.IbmDemoBackend.services.PostServices;
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/")
 public class PostController {
     private final PostServices postServices;
     
@@ -20,7 +20,7 @@ public class PostController {
         this.postServices = postServices;
     }
 
-    @PostMapping
+    @PostMapping("post")
     public ResponseEntity<PostDto> createUser(@RequestBody PostDto post) {
         PostDto createdPost = postServices.createPost(post);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);

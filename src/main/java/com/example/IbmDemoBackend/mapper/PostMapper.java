@@ -8,9 +8,9 @@ public class PostMapper {
     public static PostDto toPostDto(PostEntity post) {
         return new PostDto(
             post.getId(),
-            post.getTitle(),
-            post.getContent(),
             post.getUserId(),
+            post.getTitle(),
+            post.getContent(),  
             post.getCreatedAt()
         );
     }
@@ -18,9 +18,9 @@ public class PostMapper {
     public static PostEntity toPostEntity(PostDto post) {
         return new PostEntity(
             post.getId(),
-            post.getTitle(),
-            post.getContent(),
             post.getUserId(),
+            post.getTitle(),
+            post.getContent(),        
             post.getCreatedAt()
         );
     }
