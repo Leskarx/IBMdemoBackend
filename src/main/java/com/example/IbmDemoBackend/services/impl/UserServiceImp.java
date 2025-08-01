@@ -1,5 +1,6 @@
 package com.example.IbmDemoBackend.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -34,9 +35,14 @@ public UserDto createUser(UserDto user) {
     if (userRepo.existsByEmail(user.getEmail())) {
         throw new RuntimeException("Email already exists.");
     }
+      // Initialize postIds list if null
+      if (user.getPostIds() == null) {
+        user.setPostIds(new ArrayList<>());
+    }
 
     UserEntity userEntity = UserMaper.toUserEntity(user);
     UserEntity savedUserEntity = userRepo.save(userEntity);
+    savedUserEntity.setPassword(null);
     return UserMaper.toUserDto(savedUserEntity);
 }
 
