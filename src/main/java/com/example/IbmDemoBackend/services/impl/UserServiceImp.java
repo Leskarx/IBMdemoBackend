@@ -3,6 +3,7 @@ package com.example.IbmDemoBackend.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.IbmDemoBackend.dto.UserDto;
@@ -16,9 +17,11 @@ public class UserServiceImp implements UserServices {
 
   
     private final UserRepo userRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImp(UserRepo userRepo) {
+    public UserServiceImp(UserRepo userRepo,PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+        this.passwordEncoder=passwordEncoder;
     }
 
     // @Override
@@ -38,7 +41,8 @@ public UserDto createUser(UserDto user) {
       // Initialize postIds list if null
       if (user.getPostIds() == null) {
         user.setPostIds(new ArrayList<>());
-    }
+    }String hashedPassword=passwordEncoder.encode(user.getPassword());
+    user.setPassword(hashedPassword);
 
     UserEntity userEntity = UserMaper.toUserEntity(user);
     UserEntity savedUserEntity = userRepo.save(userEntity);
