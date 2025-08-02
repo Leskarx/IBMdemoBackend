@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.IbmDemoBackend.dto.PostDto;
@@ -31,17 +32,23 @@ public class PostServicesImp implements PostServices {
 
     @Override
     public PostDto createPost(PostDto postDto) {
+         // Get currently logged-in user's email from security context
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    UserEntity user = userRepo.findByEmail(email)
+    .orElseThrow(() -> new RuntimeException("User not found: " + email));
         // Step 1: Validate input userId
-        String userId = postDto.getUserId();
-        UserEntity user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        // String userId = postDto.getUserId();
+        // UserEntity user = userRepo.findById(userId)
+        //         .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
     
         // Step 2: Map DTO to Entity and set created time
         PostEntity postEntity = PostMapper.toPostEntity(postDto);
         postEntity.setCreatedAt(Instant.now());
+        postEntity.setUserId(user.getId());
     
         // Step 3: Save the post
         PostEntity savedPost = postRepo.save(postEntity);
+        savedPost.setUserId(null);
     
         // Step 4: Update user's postIds
         List<String> postIds = user.getPostIds();
